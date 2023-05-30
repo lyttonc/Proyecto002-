@@ -16,6 +16,7 @@ const cantidades = []
 //Defino las variables contadores a utilizar a posterior
 let contador1 = 0
 let contador2 = 0
+let contador3 = 0
 
 //Defino función para comprobar que la cantidad de un producto ingresado sea numérico
 function cantidad_compra(contador2){
@@ -92,8 +93,26 @@ function productoria(productos, cantidades) {
     alert("El total de su compra es " + resultadototal )
 }
        
-productoria(productos,cantidades)
 
+//función a ejecutar para calcular las cuotas
+function cuota(productoria){
+    cantidad_cuota = prompt("Ingrese la cantidad de cuotas. Solo permitido 1, 2 o 3 sin interés");
+    total_cuota = resultadototal/cantidad_cuota
+    while (contador3 == 0)
+    {
+        if(cantidad_cuota == "1" || cantidad_cuota == "2" || cantidad_cuota =="3") {
+            alert("Pagarás " + total_cuota + " en " + cantidad_cuota + " cuota(s)");
+            contador3 = 1
+        } else {    
+            alert("Ingresaste un número incorrecto");
+            cantidad_cuota = prompt("Ingrese la cantidad de cuotas. Solo permitido 1, 2 o 3 sin interés");
+            contador3 = 0
+        }
+    }
+}
+
+productoria(productos,cantidades)
+cuota(productoria)
 
 
 //A partir de acá es código obsoleto
