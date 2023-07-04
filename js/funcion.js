@@ -1,14 +1,10 @@
-//Carrito de compra de 1 producto.
-//Datos mínimos de nombre y apellido.
-//Denerá msotrar el costo del mismo, canitdad de cuotas disponibles y el calculo final a pagar.
+//Carrito de compra de productos SaaS 
 
 
 // defino primero mis constantes de precios para cada producto.
-const preciooffice365 = 550
-const preciogoogleworkspace = 234
-const preciosamsungknox = 124
-const precioclarodrive = 45
-
+const preciooffice365 = 5550
+const preciogoogleworkspace = 2340
+const preciosamsungknox = 1240
 
 
 //Automaticamente sin submit mostrar lo que tiene que pagar en cada cuota
@@ -16,14 +12,94 @@ const precioclarodrive = 45
 let input_nombre = document.getElementById("name")
 let input_email = document.getElementById("email")
 let input_cantidad = document.getElementById("cantidad")
+let input_cantidad_microsoft = document.getElementById("cantidad_microsoft")
+let input_cantidad_google = document.getElementById("cantidad_google")
+let input_cantidad_knox = document.getElementById("cantidad_knox")
 let input_cuotas = document.getElementById("cuotas")
 let input_observacion = document.getElementById("mensaje")
 
-function calculo_cuota(cantidad_guardar, cuotas_guardar){
-    if (cantidad_guardar>0 && cuotas_guardar>0){
-        calculo = (preciooffice365*cantidad_guardar)/cuotas_guardar;
+//Calculo de subtotales
+cantidad_guardar_microsoft = 0;
+input_cantidad_microsoft.addEventListener("input", () => {
+    cantidad_guardar_microsoft = input_cantidad_microsoft.value;
+    calculo_subtotal_microsoft(cantidad_guardar_microsoft);
+    calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cantidad_guardar_knox);
+    calculo_cuota(cuotas_guardar);
+    })
+function calculo_subtotal_microsoft(cantidad_guardar_microsoft){
+    if (cantidad_guardar_microsoft > 0){
+        subtotal_microsoft = preciooffice365*cantidad_guardar_microsoft;
+        let adicional_microsoft = document.getElementById("contenedor_microsoft");
+        adicional_microsoft.innerHTML = "<h6> Subtotal: $</h6>" + subtotal_microsoft;
+    }else{
+        let adicional_microsoft = document.getElementById("contenedor_microsoft");
+        adicional_microsoft.innerHTML = ""; 
+    }
+    }
+
+cantidad_guardar_google = 0;
+input_cantidad_google.addEventListener("input", () => {
+    cantidad_guardar_google = input_cantidad_google.value;
+    calculo_subtotal_google(cantidad_guardar_google);
+    calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cantidad_guardar_knox)
+    calculo_cuota(cuotas_guardar)
+    })
+function calculo_subtotal_google(cantidad_guardar_google){
+    if (cantidad_guardar_google > 0){
+        subtotal_google = preciogoogleworkspace*cantidad_guardar_google;
+        let adicional_google = document.getElementById("contenedor_google");
+        adicional_google.innerHTML = "<h6> Subtotal: $</h6>" + subtotal_google;
+    }else{
+        let adicional_google = document.getElementById("contenedor_google");
+        adicional_google.innerHTML = ""; 
+    }
+    }
+    
+cantidad_guardar_knox = 0;
+input_cantidad_knox.addEventListener("input", () => {
+    cantidad_guardar_knox = input_cantidad_knox.value;
+    calculo_subtotal_knox(cantidad_guardar_knox);   
+    calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cantidad_guardar_knox)
+    calculo_cuota(cuotas_guardar)
+    })
+function calculo_subtotal_knox(cantidad_guardar_knox){
+    if (cantidad_guardar_knox > 0){
+        subtotal_knox = preciosamsungknox*cantidad_guardar_knox;
+        let adicional_knox = document.getElementById("contenedor_knox");
+        adicional_knox.innerHTML = "<h6> Subtotal: $</h6>" + subtotal_knox;
+    }else{
+        let adicional_knox = document.getElementById("contenedor_knox");
+        adicional_knox.innerHTML = ""; 
+    }
+    }   
+    
+//Cálculo del total de la compra
+function calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cantidad_guardar_knox){
+    if (cantidad_guardar_microsoft >= 0 && cantidad_guardar_google >= 0 && cantidad_guardar_knox >= 0){
+        total_compra_carrito = preciooffice365*cantidad_guardar_microsoft + preciogoogleworkspace*cantidad_guardar_google + preciosamsungknox*cantidad_guardar_knox;
+        let adicional_carrito = document.getElementById("contenedor_total_compra");
+        adicional_carrito.innerHTML = "<h6> Total de compra: $</h6>" + total_compra_carrito;
+    }else{
+        let adicional_carrito = document.getElementById("contenedor_total_compra");
+        adicional_carrito.innerHTML = ""; 
+    }
+    return total_compra_carrito;
+    }
+
+
+//Cálculo de cuotas
+cuotas_guardar = 0;
+input_cuotas.addEventListener("input", () => {
+    cuotas_guardar = input_cuotas.value;
+    //console.log(cuotas_guardar);
+    calculo_cuota(cuotas_guardar);
+    })
+
+function calculo_cuota(cuotas_guardar){
+    if (cuotas_guardar > 0){
+        calculo = (preciooffice365*cantidad_guardar_microsoft + preciogoogleworkspace*cantidad_guardar_google + preciosamsungknox*cantidad_guardar_knox)/cuotas_guardar;
         let adicional = document.getElementById("contenedor");
-        adicional.innerHTML = "<h6> Valor de cada cuota: </h6>" + calculo;        
+        adicional.innerHTML = "<h6> Valor de cada cuota: $</h6>" + calculo;        
         //console.log("hola");
     }else{
         let adicional = document.getElementById("contenedor");
@@ -31,20 +107,6 @@ function calculo_cuota(cantidad_guardar, cuotas_guardar){
     }
     return calculo_cuota
 }
-
-cuotas_guardar = 0;
-cantidad_guardar = 0;
-input_cantidad.addEventListener("input", () => {
-    cantidad_guardar = input_cantidad.value;
-    //console.log(cantidad_guardar);
-    calculo_cuota(cantidad_guardar, cuotas_guardar)
-    })
-
-input_cuotas.addEventListener("input", () => {
-    cuotas_guardar = input_cuotas.value;
-    //console.log(cuotas_guardar);
-    calculo_cuota(cantidad_guardar, cuotas_guardar)
-    })
 
 //Función adicionar imagen dependiente de si se deja observación o no
 function mostrar_carafeliz(contadorpalabra){
@@ -107,7 +169,7 @@ formulario.addEventListener("submit", (e)=> {
         showConfirmButton: false,
         timer: 3000
       });  
-    
+    setTimeout( function() { window.location.href = "/html/pedido.html"; }, 3000 );
 });
 
 
@@ -140,159 +202,5 @@ function validar_formulario(e){
 }
 
 
-
-
-
-
-//------------------------------------------------------------------------------------------------
-
-/*
-//Defino nuevos arrays
-const productos = []
-const cantidades = []
-
-//Defino las variables contadores a utilizar a posterior
-let contador1 = 0
-let contador2 = 0
-let contador3 = 0
-*/
-
-
-//Todo lo de abajo es histórico
-/*
-//Defino función para comprobar que la cantidad de un producto ingresado sea numérico
-function cantidad_compra(contador2){
-    while (contador2 == 0) //ciclo para que el dato ingresado sea numérico
-    {
-    cantidad = prompt("Ingresa la cantidad que desea comprar")
-
-    if( isNaN(cantidad) == false) {
-    contador2 = 1;
-    cantidades.push(cantidad)
-    } else { 
-        alert("Ingresaste un número incorrecto")    
-        } 
-    }    
-}
-
-//sintaxis a ejecutarse ni bien se apertura la página
-while (contador1 == 0) //ciclo para seleccionar el o los productos. Los mismos se almacnarán en el array correspondiente.
-{
-    producto = prompt("Ingresa el producto que querés comprar\n1-Office 365 (550 ARS) \n2-Google Workspace (234 ARS) \n3-Samsung Knox (124 ARS) \n4-Claro Drive (45 ARS)")
-    
-    if(producto == "1" || producto == "2" || producto =="3" || producto =="4") {
-
-        if(producto == "1") {
-            alert("seleccionaste Office 365");
-            productos.push(preciooffice365);
-            cantidad_compra(0)
-            
-        }
-        if(producto == "2") {
-            alert("seleccionaste Google Workspace");
-            productos.push(preciogoogleworkspace);
-            cantidad_compra(0)
-            
-        }
-        if(producto == "3") {
-            alert("seleccionaste Samsung Knox");
-            productos.push(preciosamsungknox);
-            cantidad_compra(0)
-             
-        }
-        if(producto == "4") {
-            alert("seleccionaste Claro Drive");
-            productos.push(precioclarodrive);
-            cantidad_compra(0)
-        }      
-    } else { 
-        alert("Ingresaste un número incorrecto")
-        decision1 = prompt("¿Desea volver a seleccionar el producto?\n1-Ingrese cualquier tecla para continuar \2-Ingrese NO para salir")
-        if (decision1 == "NO") {
-            contador1 = 1;
-            contador2 = 1            
-        } 
-    }
-    pregunta = prompt("¿Desea seguir comprado? Escribir SI para seguir comprando. Para salir presione ingrese cualquier palabra")
-    if(pregunta == "SI"){
-        contador1 = 0   
-    } else {
-        contador1 = 1
-
-    }
-}  
-   
-let resultadototal = 0
-
-//función a ejecutar para conocer el total del importe.
-function productoria(productos, cantidades) {
-
-    for (let i = 0; i <productos.length; i++){
-        resultado = productos[i]*cantidades[i]
-        resultadototal += resultado
-        }
-        
-    alert("El total de su compra es " + resultadototal )
-}
-       
-
-//función a ejecutar para calcular las cuotas
-function cuota(productoria){
-    cantidad_cuota = prompt("Ingrese la cantidad de cuotas. Solo permitido 1, 2 o 3 sin interés");
-    total_cuota = resultadototal/cantidad_cuota
-    while (contador3 == 0)
-    {
-        if(cantidad_cuota == "1" || cantidad_cuota == "2" || cantidad_cuota =="3") {
-            alert("Pagarás " + total_cuota + " en " + cantidad_cuota + " cuota(s)");
-            contador3 = 1
-        } else {    
-            alert("Ingresaste un número incorrecto");
-            cantidad_cuota = prompt("Ingrese la cantidad de cuotas. Solo permitido 1, 2 o 3 sin interés");
-            contador3 = 0
-        }
-    }
-}
-
-productoria(productos,cantidades)
-cuota(productoria)
-*/
-
-
-
-
-//A partir de acá es código obsoleto
-/*
-
-function productoria(producto, cantidad) {
-    
-    if (producto =="1") {
-        resultado = cantidad*preciooffice365
-    }
-    if (producto =="2") {
-        resultado = cantidad*preciogoogleworkspace
-    }
-    if (producto =="3") {
-        resultado = cantidad*preciosamsungknox
-    }
-    if (producto =="4") {
-        resultado = cantidad*precioclarodrive
-    }
-    alert("El total de su compra es " + resultado )
-}
-
-
-while (contador2 == 0) //ciclo para que el dato ingresado sea
-{
-    cantidad = prompt("Ingresa la cantidad que desea comprar")
-
-    if( isNaN(cantidad) == false) {
-    contador2 = 1;
-    cantidades.push(cantidad)
-    } else { 
-        alert("Ingresaste un número incorrecto")    
-        } 
-}
-
-productoria(producto,cantidad)
-
-*/
+//Falta eliminar el fomulario cuando termina mandar compra
+//pensar si se puede incluir número de TC.
