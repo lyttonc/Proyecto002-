@@ -1,13 +1,13 @@
 //Carrito de compra de productos SaaS 
 
 
-// defino primero mis constantes de precios para cada producto.
+// Defino primero mis constantes de precios para cada producto.
 const preciooffice365 = 5550
 const preciogoogleworkspace = 2340
 const preciosamsungknox = 1240
 
 
-//Automaticamente sin submit mostrar lo que tiene que pagar en cada cuota
+//Guardar información de los inputs.
 
 let input_nombre = document.getElementById("name")
 let input_email = document.getElementById("email")
@@ -18,7 +18,7 @@ let input_cantidad_knox = document.getElementById("cantidad_knox")
 let input_cuotas = document.getElementById("cuotas")
 let input_observacion = document.getElementById("mensaje")
 
-//Calculo de subtotales
+//Calculo de subtotales automaticamente. Modificaición del DOM.
 cantidad_guardar_microsoft = 0;
 input_cantidad_microsoft.addEventListener("input", () => {
     cantidad_guardar_microsoft = input_cantidad_microsoft.value;
@@ -59,7 +59,7 @@ cantidad_guardar_knox = 0;
 input_cantidad_knox.addEventListener("input", () => {
     cantidad_guardar_knox = input_cantidad_knox.value;
     calculo_subtotal_knox(cantidad_guardar_knox);   
-    calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cantidad_guardar_knox)
+    calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cantidad_guardar_knox);
     calculo_cuota(cuotas_guardar)
     })
 function calculo_subtotal_knox(cantidad_guardar_knox){
@@ -73,7 +73,7 @@ function calculo_subtotal_knox(cantidad_guardar_knox){
     }
     }   
     
-//Cálculo del total de la compra
+//Cálculo del total de la compra. Modifica en DOM.
 function calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cantidad_guardar_knox){
     if (cantidad_guardar_microsoft >= 0 && cantidad_guardar_google >= 0 && cantidad_guardar_knox >= 0){
         total_compra_carrito = preciooffice365*cantidad_guardar_microsoft + preciogoogleworkspace*cantidad_guardar_google + preciosamsungknox*cantidad_guardar_knox;
@@ -87,7 +87,7 @@ function calculo_total(cantidad_guardar_microsoft, cantidad_guardar_google, cant
     }
 
 
-//Cálculo de cuotas
+//Cálculo de cuotas. Modifica el DOM.
 cuotas_guardar = 0;
 input_cuotas.addEventListener("input", () => {
     cuotas_guardar = input_cuotas.value;
@@ -108,7 +108,7 @@ function calculo_cuota(cuotas_guardar){
     return calculo_cuota
 }
 
-//Función adicionar imagen dependiente de si se deja observación o no
+//Función adicionar imagen dependiente de si se deja observación o no. Se muestra una imagen distinta. Se modifica el DOM.
 function mostrar_carafeliz(contadorpalabra){
     if (contadorpalabra != ""){
         let adicional = document.getElementById("contenedor_imagen");
@@ -127,7 +127,7 @@ function mostrar_carafeliz(contadorpalabra){
     return mostrar_carafeliz
     }
 
-//Función contar palabra dentro del input observación
+//Función contar palabra dentro del input observación.
 function contar_palabras(){
 	//Obtenemos el texto del campo
 	var texto = document.getElementById("mensaje").value;
@@ -156,20 +156,12 @@ input_observacion.addEventListener("input", () => {
 
 
 // Cuando se de submit al formulario se enviará la información al local storage y se mostrará un pop up (sweetalert)
-//agradeciendo por la compra
+//agradeciendo por la compra. En caso que no esté completa la información del fomrulario, se generará alerta de error.
 
 let formulario = document.querySelector("#contactForm");
 formulario.addEventListener("submit", (e)=> {
-    console.log("hola tarola")
     validar_formulario(e);
-    Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Gracias por tu compra',
-        showConfirmButton: false,
-        timer: 3000
-      });  
-    setTimeout( function() { window.location.href = "/html/pedido.html"; }, 3000 );
+    
 });
 
 
@@ -179,28 +171,59 @@ function validar_formulario(e){
     const input_nombreform = e.target[0];
     const input_emailform = e.target[1];
     const input_cantidadform = e.target[2];
-    const input_cuotasform = e.target[3];
-    const input_obsform = e.target[4];
+    const input_obsform = e.target[3];
     const compra_guardar = {
-        producto: "Microsoft",
+        producto: `Tu compra de:  Microsoft-> ${input_cantidad_microsoft.value} licencias | 
+        Google Workspace-> ${input_cantidad_google.value} licencias |
+        Knox-> ${input_cantidad_google.value} licencias`,
         nombre: input_nombreform.value,
         email: input_emailform.value,
         cantidad: input_cantidadform.value,
-        cuotas: input_cuotasform.value,
         observacion: input_obsform.value,
     };
-    console.log(`Tu compra microsoft: ${input_cantidadform.value}`);
-    localStorage.setItem("hola","tarola");
 
     
-    const compra_guardar_enJSON = JSON.stringify(compra_guardar);
-    console.log(compra_guardar_enJSON);
-    localStorage.setItem("producto1",compra_guardar_enJSON);
+    if(input_cantidad_google.value > 0 || input_cantidad_knox.value > 0 || input_cantidad_microsoft.value > 0) {
+        if(input_nombreform.value != '' && input_emailform.value != '' && input_cantidadform.value > 0){
+            console.log(input_nombreform.value)                      
+            
+            console.log(`Tu compra de:  Microsoft-> ${input_cantidad_microsoft.value} licencias | 
+             Google Workspace-> ${input_cantidad_google.value} licencias |
+             Knox-> ${input_cantidad_google.value} licencias`);
+            localStorage.setItem("hola","tarola");
+            
+            const compra_guardar_enJSON = JSON.stringify(compra_guardar);
+            console.log(compra_guardar_enJSON);
+            localStorage.setItem("producto1",compra_guardar_enJSON);
 
-    const compra_desde_enJason = JSON.parse(localStorage.getItem("producto1"));
-    console.log(compra_desde_enJason.nombre);
+            const compra_desde_enJason = JSON.parse(localStorage.getItem("producto1"));
+            console.log(compra_desde_enJason.nombre);
+
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Gracias por tu compra',
+                showConfirmButton: false,
+                timer: 3000
+            });  
+            setTimeout( function() { window.location.href = "/html/pedido.html"; }, 3000 );
+
+        }else{
+            console.log("error"); 
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Complete el formulario!',
+                footer: '<a href="">Why do I have this issue?</a>'
+                });
+        }
+    }else{
+        console.log("error"); 
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Complete el fomrulario!',
+            footer: '<a href="">Why do I have this issue?</a>'
+            });
+    }
 }
-
-
-//Falta eliminar el fomulario cuando termina mandar compra
-//pensar si se puede incluir número de TC.

@@ -1,10 +1,7 @@
 //Definiciones de acceso a la página web.
-//Logeo de ususario para poder acceder a las funcionalidades del carito de compra
-
+//Logeo de ususario para poder acceder a las funcionalidades del carrito de compra
 //Submit, compara el usuario y contraseña ingresado con lo almacenado en el console log.
 //Al hacer match debe permitirle acceder a la pestaña de pedidos.
-//Debe haber una pestaña qeu hable de los productos y sus funcionalidades y si el cliente quiere hacer un pedido, primero debe logearse.
-//Suponemos que ya tiene ususario y contraseña.
 
 
 
@@ -12,6 +9,7 @@ let input_email_loging = document.getElementById("email_loging");
 let input_password_loging = document.getElementById("password_loging")
 
 
+//Guardar infromación de datos para relizar el login.
 guardar_email = 0;
 input_email_loging.addEventListener("input", () => {
     guardar_email = input_email_loging.value;
@@ -22,8 +20,6 @@ input_password_loging.addEventListener("input", () => {
 })
 
 
-///Usar esta parte para validar el fomr de logign con el usuario y password, y a continuación dar acceso a pestañas
-
 //Declarar usuario y password que está habilitado.
 
 const acceso_log = 0;
@@ -32,7 +28,7 @@ const usuario_acceso = {
     password: "Lytton1234"
 }
 
-//
+//Validar ususario y contraseña. En caso incorrecto, se comunicará un error.
 let formulario_loging = document.querySelector("#contactForm_loging");
 formulario_loging.addEventListener("submit", (e)=> {
     console.log("hola tarola")
